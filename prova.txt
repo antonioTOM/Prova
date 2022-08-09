@@ -1,0 +1,3 @@
+testo di prova nel file,
+se funzionerà avrai l'onore di essere il primo file ad essere condiviso su GitHub da Termux
+
