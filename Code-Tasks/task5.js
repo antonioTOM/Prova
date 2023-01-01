@@ -9,12 +9,16 @@ function ord(char) {
 }
 
 function main(t, l, words, s1, s2, n, a, b, c, d) {
+    const xValues = [ord(s1), ord(s2)];
     const longStringChars = [s1, s2];
-    for (let charNr = longStringChars.length; charNr < 50; charNr++) {
-        let xi = (a * ord(longStringChars[charNr - 1] + b * ord(longStringChars[charNr - 2]) + c) % d;
+    for (let charNr = longStringChars.length; charNr < n; charNr++) {
+        let xi = (a * xValues[charNr - 1] + b * xValues[charNr - 2] + c) % d;
         let si = char(97 + (xi % 26));
+        xValues.push(xi);
+        longStringChars.push(si);
     }
     const longString = longStringChars.join('');
+    return longString;
 }
 
-main(1, 5, ['axpaj', 'apxaj', 'dnrbt', 'pjxdn', 'abd'], 'a', 'a', 50, 1, 1, 1, 30);
+console.log(main(1, 5, ['axpaj', 'apxaj', 'dnrbt', 'pjxdn', 'abd'], 'a', 'a', 50, 1, 1, 1, 30));
