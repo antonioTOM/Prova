@@ -26,23 +26,31 @@ function main(t, l, words, s1, s2, n, a, b, c, d) {
         const element = [validWords[index][0], validWords[index][validWords[index].length - 1]];
         const firstCharIndexes = longStringChars.map((el, index) => {if (el === element[0]) {return index}}).filter(el => el !== undefined);
         const lastCharIndexes = longStringChars.map((el, index) => {if (el === element[1]) {return index}}).filter(el => el !== undefined);
-        lastCharIndexes.forEach((el, index2) => {
-            let runTime = firstCharIndexes.length;
-            for (let index3 = 0; index3 < runTime; index3++) {
+        let runTime = lastCharIndexes.length;
+        for (let index2 = 0; index2 < runTime; index2++) {
+            const el = lastCharIndexes[index2];
+            let runTime2 = firstCharIndexes.length;
+            for (let index3 = 0; index3 < runTime2; index3++) {
                 if (el > firstCharIndexes[index3]) {
                     if (el - firstCharIndexes[index3] === validWords[index].length - 1) {
-                        console.log([validWords[index], element, firstCharIndexes[index3], el])
-                        let wordInnerChars = validWords[index].slice(1, validWords[index].length - 1);
-                        let longStringSubStringChars = longStringChars.slice(firstCharIndexes[index3] + 1, el);
-                        console.log(wordInnerChars, longStringSubStringChars)
+                        //console.log([validWords[index], element, firstCharIndexes[index3], el])
+                        let wordInnerCharsStr = validWords[index].slice(1, validWords[index].length - 1).sort().join('');
+                        let longStringSubCharsStr = longStringChars.slice(firstCharIndexes[index3] + 1, el).sort().join('');
+                        if (wordInnerCharsStr === longStringSubCharsStr) {
+                            scrambledWordsInLongString++;
+                            //console.log(index3, index);
+                        }
+                        //console.log(wordInnerCharsStr, longStringSubCharsStr)
                     }
                 } else {
-                    runTime = index3;
+                    runTime2 = index3;
                 }
+                //console.log(index, index3, el, lastCharIndexes, firstCharIndexes)
             }
-        });
+        };
         //console.log([validWords[index].length, firstCharIndexes, lastCharIndexes])
     }
+    return `Case #${t}: ${scrambledWordsInLongString}`;
 }
 
-main(1, 5, ['axpaj', 'apxaj', 'dnrbt', 'pjxdn', 'abd'], 'a', 'a', 50, 1, 1, 1, 30);
+console.log(main(1, 5, 'axpaj apxaj dnrbt pjxdn abd'.split(' '), 'a', 'a', 50, 1, 1, 1, 30));
