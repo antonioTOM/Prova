@@ -21,7 +21,7 @@ function main(t, l, words, s1, s2, n, a, b, c, d) {
     for (let index = 0; index < l; index++) {
         validWords.push(words[index].split(''));
     }
-    let scrabledWordsInLongString = 0;
+    let scrambledWordsInLongString = 0;
     for (let index = 0; index < validWords.length; index++) {
         const element = [validWords[index][0], validWords[index][validWords[index].length - 1]];
         const firstCharIndexes = longStringChars.map((el, index) => {if (el === element[0]) {return index}}).filter(el => el !== undefined);
@@ -31,9 +31,10 @@ function main(t, l, words, s1, s2, n, a, b, c, d) {
             for (let index3 = 0; index3 < runTime; index3++) {
                 if (el > firstCharIndexes[index3]) {
                     if (el - firstCharIndexes[index3] === validWords[index].length - 1) {
-                        if (condition) {
-                            
-                        }
+                        console.log([validWords[index], element, firstCharIndexes[index3], el])
+                        let wordInnerChars = validWords[index].slice(1, validWords[index].length - 1);
+                        let longStringSubStringChars = longStringChars.slice(firstCharIndexes[index3] + 1, el);
+                        console.log(wordInnerChars, longStringSubStringChars)
                     }
                 } else {
                     runTime = index3;
