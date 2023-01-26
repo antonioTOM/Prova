@@ -1,14 +1,22 @@
-// https://codingcompetitions.withgoogle.com/kickstart/round/0000000000050edf/0000000000051004
-const alphabet = 'abcdefghijklmnopqrstuvwxyz'.split('');
-const firstASCII = 97;
-function char(ord) {
-    return alphabet[ord - firstASCII];
-}
-function ord(char) {
-    return alphabet.indexOf(char) + firstASCII;
+//https://codingcompetitions.withgoogle.com/kickstart/round/0000000000050edf/0000000000051004
+const fs = require('fs');
+const input = fs.readFileSync(0, 'utf8').trim().split('\n');
+
+const testCases = input.shift();
+const casesInput = [];
+for (let x = 0; x < input.length; x += 3) {
+    casesInput.push(input.slice(x, x + 3));
 }
 
-function main(t, l, words, s1, s2, n, a, b, c, d) {
+function solve(t, l, words, s1, s2, n, a, b, c, d) {
+    const alphabet = 'abcdefghijklmnopqrstuvwxyz'.split('');
+    const firstASCII = 97;
+    function char(ord) {
+        return alphabet[ord - firstASCII];
+    }
+    function ord(char) {
+        return alphabet.indexOf(char) + firstASCII;
+    }
     const xValues = [ord(s1), ord(s2)];
     const longStringChars = [s1, s2];
     for (let charNr = longStringChars.length; charNr < n; charNr++) {
@@ -17,43 +25,27 @@ function main(t, l, words, s1, s2, n, a, b, c, d) {
         xValues.push(xi);
         longStringChars.push(si);
     }
-    const validWords = [];
-    for (let index = 0; index < l; index++) {
-        validWords.push(words[index].split(''));
-    }
     let scrambledWordsInLongString = 0;
-    for (let index = 0; index < validWords.length; index++) {
-        const element = [validWords[index][0], validWords[index][validWords[index].length - 1]];
-        console.log(element)
-        const firstCharIndexes = longStringChars.map((el, index) => {if (el === element[0]) {return index}}).filter(el => el !== undefined);
-        const lastCharIndexes = longStringChars.map((el, index) => {if (el === element[1]) {return index}}).filter(el => el !== undefined);
-        //console.log(firstCharIndexes, lastCharIndexes)
-        let runTime = lastCharIndexes.length;
-        for (let index2 = 0; index2 < runTime; index2++) {
-            const el = lastCharIndexes[index2];
-            for (let index3 = 0; index3 < firstCharIndexes.length; index3++) {
-                if (el > firstCharIndexes[index3]) {
-                    if (el - firstCharIndexes[index3] === validWords[index].length - 1) {
-                        let wordInnerCharsStr = validWords[index].slice(1, validWords[index].length - 1).sort().join('');
-                        let longStringSubCharsStr = longStringChars.slice(firstCharIndexes[index3] + 1, el).sort().join('');
-                        if (wordInnerCharsStr === longStringSubCharsStr) {
-                            scrambledWordsInLongString++;
-                            runTime = index2;
-                            //console.log(index3, index);
-                        }
-                        //console.log(wordInnerCharsStr, longStringSubCharsStr)
-                    }
-                }
-                //console.log('a')
-                //console.log(index, index3, el, lastCharIndexes, firstCharIndexes)
+    for (const word of words) {
+        const firstChar = word[0];
+        const lastChar = word[word.length - 1];
+        const innerChars = word.slice(1, word.length - 1).split('').sort().join('');
+        const longStringFirstCharIndexes = longStringChars.map((el, index) => el == firstChar ? index : undefined).filter(x => x !== undefined);
+        for (const firstCharIndex of longStringFirstCharIndexes) {
+            const possibleLastChar = longStringChars[firstCharIndex + word.length - 1];
+            const possibleInnerChars = longStringChars.slice(firstCharIndex + 1, firstCharIndex + word.length - 1).sort().join('');
+            if (possibleLastChar == lastChar && possibleInnerChars == innerChars) {
+                scrambledWordsInLongString++;
+                break;
             }
-        };
-        //console.log([validWords[index].length, firstCharIndexes, lastCharIndexes])
+        }
     }
-    return `Case #${t}: ${scrambledWordsInLongString}`;
+    console.log(`Case #${t}: ${scrambledWordsInLongString}`);
 }
 
-console.log(main(1, 5, 'axpaj apxaj dnrbt pjxdn abd'.split(' '), 'a', 'a', 50, 1, 1, 1, 30));
-//console.log(main(2, 12, 'zf fvtfzfndlxlfr vnbrfr vvddzzhr dptdnjnjbx vznthzpfjdt xtlnlvdjfjdj rjbndrd xdjz pnjbhfrlh dnh hvtnb'.split(' '), 'l', 'o', 1000, 975016853, 972311008, 925928190, 999999236));
-//console.log(main(3, 43, 'dixhcpwlbhglbyzcozww enrzgyzzircllihktumym gegdhgpx doyauhk zymmehpfdefp mxphlwbdcbymwuxwqmldnxnzdwclcijhz zzzeygril attycfngkzxekgbakrajxpibrtdauaeydohin mdxrdcbxchmiwlp tbbfkzxrxcvzzoybnjgubogeexirayhakosqcsxnetz jtoeyjrictqahfnuyyvfshrfjvotkl kbxgoeosvvjowhdgzczchpuqfqetnbazkcrqrlp myoesmvllwzxxozelfvxaafzzltqafhbuqcasvwr viqzhrcfjyfohftds zyokmidovuy disczuympqrtqicefjcxzugwnydrtlx gyzciqlquiooupeyltsyqridzxyny dsafkouxcdhtpgbjidfnumwx llu vytpucfbvsfgvbhspe iieyyuoojdffyeyzqlxutxj hdckxcpxevbvspfgfbu aebjuvpujudjjrlclytflpanoivmklzrqjxbzzpsi ep fsrtyn krtzkgoktydxaiaaapxfxbkhgiac fxztcjgultwmexnypuzdyscqlcrmiiqy vfznmbgzanfzgysgpeloszwlmqcpggbotlrzailxytsh nfabqzhvzoxbc axfrfmmleehxybdypvzeyhghgkjtemgxpuwhuzqodu xdch phwmdiocxqujwkdcmxmwbpqdwwljlnbbzxlvuy tioorxfqoallthglfbwgad udmjuxnxwlwjmd qxwwujiddulcblxqmoxhwnlkmmjvdwzcpwb rpudjbulkzjbicjuhexlmxpyin uychdfhtrfqfsrtynevatylgdhxggexyhuhz tivkapscfinfxatq zggccqrhsjefouwbbdwvqohcq hnung hhtvyeytgfxfrqltsfdagdgnhre tjahnswbrt ucrrqhfotqyvojfxdujeyjftfoynshyiie'.split(' '), 'z', 'w', 1000, 991557316, 973167634, 998921210, 999999093))
-console.log(main(4, 2, 'yi nqg'.split(' '), 't', 'y', 1000, 989592496, 992224239, 970559107, 999999872));
+for (let x = 1; x <= testCases; x++) {
+    const caseInput = casesInput[x - 1];
+    const wordsInput = caseInput[1].split(' ');
+    const lastLineInput = caseInput[2].split(' ');
+    solve(x, Number(caseInput[0]), wordsInput, lastLineInput[0], lastLineInput[1], lastLineInput[2], lastLineInput[3], lastLineInput[4], lastLineInput[5], lastLineInput[6]);
+}
