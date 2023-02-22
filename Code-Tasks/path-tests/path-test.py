@@ -1,0 +1,6 @@
+content = open('Code-Tasks/path-tests/path-test.txt', 'r')
+print(content.read())
+content = open('Code-Tasks/path-tests/path-test.txt', 'a')
+content.write('\nYoo test on python passed!!!')
+content = open('Code-Tasks/path-tests/path-test.txt', 'r')
+print(content.read())
